@@ -1,0 +1,65 @@
+import json
+import os
+
+# Define the name of the configuration file
+CONFIG_FILE = "sorting_rules.json"
+
+# Default rules to use if the config file doesn't exist
+default_rules = {
+    "Receipts": ["receipt", "order", "purchase"],
+    "Work": ["meeting", "project", "deadline"],
+    "Finance": ["invoice"],
+    "Promotions": ["offer", "sale", "coupon"]
+}
+
+def load_rules():
+    """
+    Load the sorting rules from the JSON config file.
+    If the file does not exist, create it with the default rules.
+    """
+    if not os.path.exists(CONFIG_FILE):
+        # Create the config file with default rules
+        with open(CONFIG_FILE, "w") as file:
+            json.dump(default_rules, file, indent=4)
+        return default_rules
+    else:
+        # Load and return the rules from the file
+        with open(CONFIG_FILE, "r") as file:
+            try:
+                rules = json.load(file)
+                return rules
+            except ValueError:
+                # If there's an error reading the file, use default rules
+                return default_rules
+
+def sort_email(subject, rules):
+    """
+    Determine the category of an email based on its subject and the provided rules.
+    """
+    subject_lower = subject.lower()  # Convert subject to lowercase for case-insensitive matching.
+    for category, keywords in rules.items():
+        for keyword in keywords:
+            if keyword in subject_lower:
+                return category  # Return the category as soon as a match is found.
+    return 'Misc'  # If no keywords match, return 'Misc'
+
+# Example usage:
+if __name__ == "__main__":
+    # Load the rules from the config file (or create the file with defaults)
+    sorting_rules = load_rules()
+    print("Current Sorting Rules:")
+    print(json.dumps(sorting_rules, indent=4))
+    
+    # Example email subjects for testing
+    test_subjects = [
+        "Your invoice for last month",
+        "Meeting schedule for next week",
+        "Your order has been shipped",
+        "Exclusive sale offer just for you",
+        "Some random email"
+    ]
+    
+    # Print out the sorted category for each test subject
+    for subject in test_subjects:
+        category = sort_email(subject, sorting_rules)
+        print("Subject: '%s' -> Category: %s" % (subject, category))
