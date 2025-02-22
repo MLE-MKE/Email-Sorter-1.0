@@ -10,6 +10,19 @@ class EmailSorterApp:
         self.master = master
         master.title("Email Sorter App")
         
+        #peepeepoopoo I can not believe i didnt commit or push for 6 whole hours
+        #I  mean I can because I did and thats like what we all do right? 
+        #someone lie to me and say its fine that there are no branches to this. 
+        #anywasy stay tuned for the fixed 2.0 version with better or even customizable ui
+        
+        
+        #  ------ To Do -----
+        # -- 1. add a drop down customizable UI 
+        # -- background
+        # -- Text?
+        # -- Color 
+        
+        # -- 2.
         # ---------- Login Frame (shown initially) ----------
         self.login_frame = tk.Frame(master)
         self.login_frame.pack(pady=20)
@@ -198,6 +211,12 @@ class EmailSorterApp:
             return
         try:
             self.mail = imaplib.IMAP4_SSL("imap.mail.yahoo.com")
+            
+            # -- -- google imap test -- # 
+            self.mail = imaplib.IMAP4_SSL("imap.gmail.com")
+            
+            
+            
             self.mail.login(username, password)
             messagebox.showinfo("Success", "Login successful!")
             self.fetch_button.config(state="normal")
